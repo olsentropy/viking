@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .image-slider {
+            position: relative;
+            width: 1200px;
+            height: 800px;
+            overflow: hidden;
+        }
+
+        .image-slider img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .after-img {
+            clip: rect(0, 600px, 800px, 0);
+        }
+
+        .slider {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #ffffff;
+            cursor: ew-resize;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-slider">
+        <img class="before-img" src="before.jpg" alt="Before">
+        <img class="after-img" src="after.jpg" alt="After">
+        <div class="slider" id="slider"></div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const afterImg = document.querySelector('.after-img');
+        let isDragging = false;
+
+        slider.addEventListener('mousedown', function() {
+            isDragging = true;
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+
+        document.addEventListener('mousemove', function(event) {
+            if (!isDragging) return;
+            const containerRect = slider.parentElement.getBoundingClientRect();
+            let newClip = event.clientX - containerRect.left;
+            newClip = Math.max(0, Math.min(newClip, containerRect.width));
+            afterImg.style.clip = "rect(0, " + newClip + "px, " + containerRect.height + "px, 0)";
+            slider.style.left = newClip + 'px';
+        });
+    </script>
+</body>
+</html>
